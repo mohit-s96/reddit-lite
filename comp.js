@@ -114,7 +114,7 @@ const Users = (props) => {
   });
 };
 const useAsyncFetch = () => {
-  let [data, setData] = React.useState({});
+  let [data, setData] = React.useState();
   React.useEffect(() => {
     fetch("https://randomuser.me/api")
       .then((res) => res.json())
