@@ -46,7 +46,6 @@ function createStore(reducer) {
   function dispatch(action) {
     state = reducer(state, action);
     arr.forEach(function (x) {
-      console.log(x);
       if (false) {
         x.listener(state[x.stateProp]);
       } else {
@@ -94,8 +93,6 @@ const useStore = (str) => {
 // Higher order function for modifying react functional components
 
 function connectHoc(component, stateSlice) {
-  console.log(typeof component, typeof stateSlice);
-
   if (typeof component !== "function" || typeof stateSlice !== "function") {
     throw new Error("Invalid argument type to connect");
   }
