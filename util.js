@@ -1,72 +1,82 @@
-let diffState = {};
-const objHeirarchy = [];
-const objDiff = (newState, oldState) => {
-  if (
-    typeof newState !== "object" ||
-    typeof oldState !== "object" ||
-    !newState ||
-    !oldState
-  ) {
-    throw new Error("Arguments to objDiff must be object type");
-  }
-  if (Array.isArray(newState) && Array.isArray(oldState)) {
-    if (newState.length !== oldState.length) {
-      diffState = setNestedKeys(diffState, objHeirarchy, []);
+function objectComparator() {
+  let diffState = {};
+  const objHeirarchy = [];
+  const objDiff = (newState, oldState) => {
+    if (
+      typeof newState !== "object" ||
+      typeof oldState !== "object" ||
+      !newState ||
+      !oldState
+    ) {
+      throw new Error("Arguments to objDiff must be object type");
+    }
+    if (Array.isArray(newState) && Array.isArray(oldState)) {
+      if (newState.length !== oldState.length) {
+        diffState = setNestedKeys(diffState, objHeirarchy, true);
+      } else {
+        newState.forEach((item, i) => {
+          if (Array.isArray(item)) {
+            objDiff(item, oldState[i]);
+          } else if (typeof item !== "object") {
+            if (item !== oldState[i]) {
+              diffState = setNestedKeys(diffState, objHeirarchy, true);
+            }
+          } else {
+            objDiff(item, oldState[i]);
+          }
+        });
+      }
     } else {
-      newState.forEach((item, i) => {
-        if (Array.isArray(item)) {
-          objDiff(item, oldState[i]);
-        } else if (typeof item !== "object") {
-          if (item !== oldState[i]) {
-            diffState = setNestedKeys(diffState, objHeirarchy, true);
+      for (const key in newState) {
+        if (oldState[key] !== undefined && oldState[key] !== null) {
+          if (typeof newState[key] !== "object") {
+            if (newState[key] !== oldState[key]) {
+              if (!objHeirarchy.length) {
+                diffState[key] = true;
+              } else {
+                diffState = setNestedKeys(diffState, objHeirarchy, key);
+              }
+            }
+          } else {
+            objHeirarchy.push(key);
+            objDiff(newState[key], oldState[key]);
+            objHeirarchy.pop();
           }
         } else {
-          objDiff(item, oldState[i]);
+          diffState[key] = true;
         }
-      });
-    }
-  } else {
-    for (const key in newState) {
-      if (typeof newState[key] !== "object") {
-        if (newState[key] !== oldState[key]) {
-          if (!objHeirarchy.length) {
-            diffState[key] = true;
-          } else {
-            diffState = setNestedKeys(diffState, objHeirarchy, key);
-          }
-        }
-      } else {
-        objHeirarchy.push(key);
-        objDiff(newState[key], oldState[key]);
-        objHeirarchy.pop();
       }
     }
+    return diffState;
+  };
+  function setNestedKeys(state, keys, finalKey) {
+    let tempState = { ...state };
+    let nextKey = null;
+    let n = keys.length;
+    keys.forEach((key, i) => {
+      if (!nextKey) {
+        if (!tempState[key]) {
+          tempState[key] = {};
+        }
+        nextKey = tempState[key];
+        if (n == 1) {
+          nextKey[finalKey] = true;
+        }
+      } else {
+        if (i === n - 1) {
+          nextKey[key] = finalKey;
+        } else {
+          nextKey[key] = {};
+          nextKey = nextKey[key];
+        }
+      }
+    });
+    //   console.log(tempState);
+    return tempState;
   }
-};
-function setNestedKeys(state, keys, finalKey) {
-  let tempState = { ...state };
-  let nextKey = null;
-  let n = keys.length;
-  keys.forEach((key, i) => {
-    if (!nextKey) {
-      if (!tempState[key]) {
-        tempState[key] = {};
-      }
-      nextKey = tempState[key];
-      if (n == 1) {
-        nextKey[finalKey] = true;
-      }
-    } else {
-      if (i === n - 1) {
-        nextKey[key] = finalKey;
-      } else {
-        nextKey[key] = {};
-        nextKey = nextKey[key];
-      }
-    }
-  });
-  //   console.log(tempState);
-  return tempState;
+  return {
+    objDiff: objDiff,
+  };
 }
 
 function deepCopyObject(target, obj) {
@@ -108,25 +118,7 @@ const obj2 = {
     s2: "nagars",
     s3: [1, 3, 5],
     s4: "am",
-    s5: {
-      prop: [
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-      ],
-    },
+    s5: [],
   },
   tit: "sirs",
 };
@@ -149,40 +141,40 @@ const obj1 = {
   },
 };
 const obj4 = {
-  name: "msx",
+  name: "ms",
   addr: {
-    s1: "119",
-    s2: "nagars",
+    s1: "11",
+    s2: "nagarss",
     s3: [1, 3, 5],
     s4: "am",
-    s5: {
-      prop: [
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-        {
-          wow: "nice",
-          oop: "soo",
-          pren: "lo",
-        },
-      ],
-    },
+    s5: [
+      {
+        wow: "nice",
+        oop: "soo",
+        pren: "lo",
+      },
+      {
+        wow: "nice",
+        oop: "soo",
+        pren: "lo",
+      },
+      {
+        wow: "nice",
+        oop: "soo",
+        pren: "lo",
+      },
+      {
+        wow: "nice",
+        oop: "soo",
+        pren: "lo",
+      },
+    ],
   },
   tit: "sirs",
 };
+// let { objDiff, diffState } = objectComparator();
 
-objDiff(obj2, obj4);
-console.log(diffState);
+// console.log(objDiff(obj4, obj2));
+// objDiff(obj2, obj4);
+// console.log(diffState);
 // obj1.log();

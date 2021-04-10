@@ -44,7 +44,19 @@ function createStore(reducer) {
     return state;
   }
   function dispatch(action) {
+    const prevState = deepCopyObject({}, state);
     state = reducer(state, action);
+    const { objDiff } = objectComparator();
+    let diffState = objDiff(state, prevState);
+    console.log("State---------------------------------");
+    console.log(state);
+    console.log("--------------------------------------");
+    console.log("PrevState-----------------------------");
+    console.log(prevState);
+    console.log("--------------------------------------");
+    console.log("DiffState-----------------------------");
+    console.log(diffState);
+    console.log("--------------------------------------");
     arr.forEach(function (x) {
       if (false) {
         x.listener(state[x.stateProp]);
