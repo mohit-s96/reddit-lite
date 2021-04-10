@@ -1,3 +1,5 @@
+// Reducer function
+
 function reducer(
   state = { one: 0, two: 0, users: [], loading: false },
   action
@@ -32,6 +34,9 @@ function reducer(
       return state;
   }
 }
+
+//Redux-like createstore
+
 function createStore(reducer) {
   let state;
   let arr = [];
@@ -41,7 +46,8 @@ function createStore(reducer) {
   function dispatch(action) {
     state = reducer(state, action);
     arr.forEach(function (x) {
-      if (x.stateProp && state[x.stateProp] !== undefined) {
+      console.log(x);
+      if (false) {
         x.listener(state[x.stateProp]);
       } else {
         x.listener(state);
@@ -55,7 +61,48 @@ function createStore(reducer) {
       arr = arr.filter((x) => x.listener !== listener);
     };
   }
+
   dispatch({});
   return { getData: getData, dispatch: dispatch, subscribe: subscribe };
 }
+
 let store = createStore(reducer);
+
+//Use store hook (for react) -- needs improvements
+
+const useStore = (str) => {
+  let [count, setCount] = React.useState();
+  const [unsub, setUnsub] = React.useState(() => () => {});
+  const sub = () => {
+    let uns = store.subscribe(setCount, str);
+    setUnsub(() => uns);
+  };
+  React.useEffect(() => {
+    if (str) {
+      setCount(0);
+    } else {
+      setCount(store.getData());
+    }
+    sub();
+  }, []);
+  const dispatchAction = (action) => {
+    store.dispatch(action);
+  };
+  return { count: count, setCount: dispatchAction, unsub: unsub, sub: sub };
+};
+
+// Higher order function for modifying react functional components
+
+function connectHoc(component, stateSlice) {
+  console.log(typeof component, typeof stateSlice);
+
+  if (typeof component !== "function" || typeof stateSlice !== "function") {
+    throw new Error("Invalid argument type to connect");
+  }
+
+  const calculatedState = stateSlice(store.getData());
+
+  component.reduxState = calculatedState;
+
+  return component;
+}

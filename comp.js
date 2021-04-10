@@ -1,8 +1,8 @@
 const Counter = () => {
-  const { count, setCount, unsub, sub } = useStore("one");
+  const { count, setCount, unsub, sub } = useStore(Counter);
   return (
     <div style={{ textAlign: "center" }}>
-      <span id="count">{count}</span>
+      {/* <span id="count">{count}</span> */}
       <br />
       <button id="btn" onClick={() => setCount({ type: "INCREMENT" })}>
         Increase
@@ -40,7 +40,7 @@ const UserComponent = () => {
           justifyContent: "center",
           maxWidth: "1080px",
           margin: "0 auto",
-          backgroundColor: "red",
+          // backgroundColor: "red",
           flexWrap: "wrap",
         }}
       >
@@ -122,34 +122,15 @@ const useAsyncFetch = () => {
   }, []);
   return { data };
 };
-const useStore = (str) => {
-  let [count, setCount] = React.useState();
-  const [unsub, setUnsub] = React.useState(() => () => {});
-  const sub = () => {
-    let uns = store.subscribe(setCount, str);
-    setUnsub(() => uns);
-  };
-  React.useEffect(() => {
-    // console.log("mounted");
-    if (str) {
-      setCount(store.getData()[str]);
-    } else {
-      setCount(store.getData());
-    }
-    sub();
-  }, []);
-  const dispatchAction = (action) => {
-    store.dispatch(action);
-  };
-  return { count: count, setCount: dispatchAction, unsub: unsub, sub: sub };
-};
 
 const App = () => {
   return (
     <div>
-      <Counter />
+      {connectHoc(Counter, (state) => ({
+        one: state.one,
+      }))()}
       <br />
-      <Counter2 />
+      {/* <Counter2 /> */}
       <br />
       <UserComponent />
     </div>
