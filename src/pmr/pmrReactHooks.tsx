@@ -9,8 +9,6 @@ export function ConnectHoc(
   Component_: React.FunctionComponent,
   stateSlice: StateSlice
 ): React.FunctionComponent {
-  console.log("Called haha");
-
   if (typeof Component_ !== "function" || typeof stateSlice !== "function") {
     throw new Error("Invalid argument type to connect");
   }
