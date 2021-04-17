@@ -1,5 +1,5 @@
 import React from "react";
-import { StateSlice, ReducerAction } from "./interfaces";
+import { StateSlice } from "./interfaces";
 import { store } from "./pmrLibrary";
 import {
   getObjectMatchFromFunctionString,
@@ -24,7 +24,7 @@ export function ConnectHoc(
 export const useStore = (
   comp: React.FunctionComponent
   // eslint-disable-next-line @typescript-eslint/ban-types
-): [count: {}, dispatchAction: (action: ReducerAction) => void] => {
+): [count: any] => {
   const [count, setCount] = React.useState({});
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const [, setUnsub] = React.useState(() => () => {});
@@ -40,8 +40,8 @@ export const useStore = (
     sub();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const dispatchAction = React.useCallback((action) => {
-    store.dispatch(action);
-  }, []);
-  return [count, dispatchAction];
+  // const dispatchAction = React.useCallback((action) => {
+  //   store.dispatch(action);
+  // }, []);
+  return [count];
 };

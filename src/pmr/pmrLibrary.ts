@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React from "react";
 import { reducer } from "./reducer";
-import { Reducer, State, ReducerAction, listeners } from "./interfaces";
+import { Reducer, StoreState, ReducerAction, listeners } from "./interfaces";
 import {
   deepCopyObject,
   objectComparator,
@@ -11,7 +11,7 @@ import {
 //Redux-like createstore
 
 function createStore(reducer: Reducer) {
-  let state: State;
+  let state: StoreState;
   let arr: Array<listeners> = [];
   function getData() {
     return state;
@@ -19,6 +19,8 @@ function createStore(reducer: Reducer) {
   function dispatch(action: ReducerAction) {
     const prevState = deepCopyObject({}, state);
     state = reducer(state, action);
+    // console.log(state);
+
     const { objDiff } = objectComparator();
     const diffState = objDiff(state, prevState);
     // console.log(diffState);

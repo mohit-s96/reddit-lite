@@ -1,39 +1,44 @@
-import { ReducerAction, Reducer, State } from "./interfaces";
+import { ReducerAction, Reducer, StoreState, ProfileData } from "./interfaces";
 export const reducer: Reducer = (
-  state: State = {
-    one: 0,
-    two: 0,
-    users: [],
-    loading: false,
-    test: { newTest: { isAuth: false } },
+  state: StoreState = {
+    isAuth: false,
+    loading: {
+      authLoading: false,
+      postsLoading: false,
+    },
+    posts: [],
+    user: {},
   },
   action: ReducerAction
 ) => {
+  if (action.type === "USER_LOADED") {
+    // console.log({
+    //   ...state,
+    //   user: action.payload,
+    // });
+  }
   switch (action.type) {
-    case "INCREMENT":
+    case "AUTH_LOADING":
       return {
         ...state,
-        one: state.one + 1,
+        loading: {
+          ...state.loading,
+          authLoading: true,
+        },
       };
-    case "DECREMENT":
+    case "AUTH_LOADED":
       return {
         ...state,
-        two: state.two - 1,
+        loading: {
+          ...state.loading,
+          authLoading: false,
+        },
+        isAuth: true,
       };
-    case "ADD_USER":
+    case "USER_LOADED":
       return {
         ...state,
-        users: [...state.users, ...(action.payload as Array<string>)],
-      };
-    case "LOADING":
-      return {
-        ...state,
-        loading: true,
-      };
-    case "LOADED":
-      return {
-        ...state,
-        loading: false,
+        user: { ...(action.payload as ProfileData) },
       };
     default:
       return state;

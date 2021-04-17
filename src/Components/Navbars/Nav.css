@@ -1,0 +1,37 @@
+.main-nav-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: rgb(255, 255, 255);
+}
+.nav-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+}
+.nav-branding {
+  font-weight: 800;
+  background: linear-gradient(to top, #ff9472, #f2709c);
+  padding: 4px;
+  font-size: 2rem;
+  color: #010101;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.nav-item-btn {
+  padding: 12px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0 1rem;
+  color: #fff;
+  font-weight: 600;
+  background: linear-gradient(to top, #ff9472, #f2709c);
+  transition: all 0.3s linear;
+}
+.nav-item-btn:hover {
+  transform: scale(0.9);
+}

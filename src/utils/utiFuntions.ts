@@ -1,4 +1,4 @@
-import { State } from "../pmr/interfaces";
+import { StoreState } from "../pmr/interfaces";
 
 export function objectComparator() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,15 +19,15 @@ export function objectComparator() {
       if (newState.length !== oldState.length) {
         diffState = setNestedKeys(diffState, objHeirarchy, true);
       } else {
-        newState.forEach((item: State, i) => {
+        newState.forEach((item: StoreState, i) => {
           if (Array.isArray(item)) {
-            objDiff(item as State, oldState[i] as State);
+            objDiff(item as StoreState, oldState[i] as StoreState);
           } else if (typeof item !== "object") {
             if (item !== oldState[i]) {
               diffState = setNestedKeys(diffState, objHeirarchy, true);
             }
           } else {
-            objDiff(item as State, oldState[i] as State);
+            objDiff(item as StoreState, oldState[i] as StoreState);
           }
         });
       }
@@ -48,7 +48,11 @@ export function objectComparator() {
             objHeirarchy.pop();
           }
         } else {
-          diffState[key] = true;
+          if (!objHeirarchy.length) {
+            diffState[key] = true;
+          } else {
+            diffState = setNestedKeys(diffState, objHeirarchy, key);
+          }
         }
       }
     }
