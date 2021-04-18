@@ -21,6 +21,11 @@ body {
 
   background-size: cover;
 }
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 @keyframes anim {
   0% {
     opacity: 0;

@@ -27,11 +27,14 @@ export const useStore = (
 ): [count: any] => {
   const [count, setCount] = React.useState({});
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const [, setUnsub] = React.useState(() => () => {});
+  const [unsub, setUnsub] = React.useState(() => () => {});
   const sub = React.useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const uns = store.subscribe(setCount, (comp as any).reduxState);
     setUnsub(() => uns);
+    return () => {
+      unsub();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   React.useEffect(() => {

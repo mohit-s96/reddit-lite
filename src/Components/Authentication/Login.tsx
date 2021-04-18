@@ -3,16 +3,20 @@ import { State } from "../Interfaces/Auth";
 import { StoreState } from "../../pmr/interfaces";
 import { login } from "../../utils/actions";
 import { useStore, ConnectHoc } from "../../pmr/pmrReactHooks";
+import { useHistory } from "react-router-dom";
+import "./login.css";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Login(): ReactElement {
+  const history = useHistory();
   const [data] = useStore(Login);
-  //   console.log(data);
+  // console.log(data);
 
   const initState: State = {};
   const [state, setState] = useState(initState);
   const submitLoginForm = (e: React.MouseEvent) => {
     e.preventDefault();
-    login(state);
+    login(state, history);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -21,25 +25,25 @@ function Login(): ReactElement {
     });
   };
   return (
-    <div className="login-page-container">
-      {data.authLoading ? (
+    <div className="login-page-container flex-center">
+      {/* {data.authLoading ? (
         <div>Loading...</div>
       ) : data?.user?.email ? (
         <div>{data.user.email}</div>
       ) : (
         <div>not auth yet</div>
-      )}
+      )} */}
       <div className="login-form-wrapper">
-        <form>
-          <div className="form-group">
+        <form className="flex-center">
+          <div className="form-group flex-center">
             <label htmlFor="email">Email: </label>
             <input type="email" id="email" onChange={handleChange} />
           </div>
-          <div className="form-group">
+          <div className="form-group flex-center">
             <label htmlFor="password">Password: </label>
             <input type="password" id="password" onChange={handleChange} />
           </div>
-          <div className="form-group">
+          <div className="form-group flex-center">
             <button type="submit" onClick={submitLoginForm}>
               Login
             </button>

@@ -1,4 +1,5 @@
 import React, { ReactElement } from "react";
+import { Link } from "react-router-dom";
 import "./Nav.css";
 
 interface Props {
@@ -17,6 +18,9 @@ function Nav({}: Props): ReactElement {
         <span className="nav-item-btn">Profile</span>
         <span className="nav-item-btn">Random Sub</span>
         <span className="nav-item-btn">Logout</span>
+        <span className="nav-item-btn">
+          <Link to="/login">Login</Link>
+        </span>
       </div>
     </nav>
   );

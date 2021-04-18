@@ -54,7 +54,8 @@ export const addOne = () => {
   store.dispatch({ type: "INCREMENT" });
 };
 
-export const login = (state: State) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const login = (state: State, history: any) => {
   store.dispatch({
     type: "AUTH_LOADING",
   });
@@ -75,6 +76,7 @@ export const login = (state: State) => {
           type: "USER_LOADED",
           payload: res[0],
         });
+        history.push("/");
       } else {
         console.log("Error - Invalid Details");
       }
