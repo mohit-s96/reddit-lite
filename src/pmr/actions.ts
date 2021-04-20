@@ -1,4 +1,4 @@
-import { store } from "../pmr/pmrLibrary";
+import { store } from "../pmr/store";
 import { State } from "../Components/Interfaces/Auth";
 import { ProfileData } from "../pmr/interfaces";
 
@@ -80,6 +80,68 @@ export const login = (state: State, history: any) => {
       } else {
         console.log("Error - Invalid Details");
       }
+    })
+    .catch((err) => console.log(err));
+};
+
+export const logout = () => {
+  store.dispatch({
+    type: "LOGOUT",
+  });
+};
+
+export const flipProfile = () => {
+  store.dispatch({ type: "FLIP_PROFILE" });
+};
+
+export const setActiveSub = (str: string) => {
+  store.dispatch({
+    type: "ACTIVE_SUB",
+    payload: str,
+  });
+  loadPosts(str);
+};
+
+export const loadPosts = (str: string) => {
+  store.dispatch({ type: "LOADING_POSTS" });
+  fetch(`https://www.reddit.com/r/${str}.json`)
+    .then((res) => res.json())
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .then((res: any) => {
+      const id = res.data.after;
+      const arr = res.data.children
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((x: any) => x.data)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((x: any) => !x.stickied);
+      store.dispatch({
+        type: "LOADED_POSTS",
+        payload: { posts: arr, next: id },
+      });
+      loadPagination();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const loadPagination = () => {
+  store.dispatch({ type: "LOADING_PAGINATION" });
+  const str = (store.getData() as any).activeSub;
+  const nexId = (store.getData() as any).nextPageId;
+  fetch(`https://www.reddit.com/r/${str}.json?after=${nexId}`)
+    .then((res) => res.json())
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .then((res: any) => {
+      const id = res.data.after;
+      const arr = res.data.children
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((x: any) => x.data)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((x: any) => !x.stickied);
+
+      store.dispatch({
+        type: "LOADED_PAGINATION",
+        payload: { posts: arr, next: id },
+      });
     })
     .catch((err) => console.log(err));
 };

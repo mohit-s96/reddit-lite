@@ -1,7 +1,3 @@
-export interface ReducerAction {
-  type?: string;
-  payload?: unknown;
-}
 export interface ProfileData {
   dob?: {
     age?: number;
@@ -64,16 +60,12 @@ export interface StoreState {
   loading: {
     authLoading: boolean;
     postsLoading: boolean;
+    paginationLoading: boolean;
   };
+  modalStates: {
+    profile: boolean;
+  };
+  nextPageId: string;
+  activeSub: string;
   user: ProfileData;
-}
-export type Reducer = (state: StoreState, action: ReducerAction) => StoreState;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type StateSlice = (state: StoreState) => StoreState | any;
-
-export interface listeners {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  listener: React.Dispatch<React.SetStateAction<{}>>;
-  reduxState: Array<string>;
 }

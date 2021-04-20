@@ -1,8 +1,9 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { State } from "../Interfaces/Auth";
 import { StoreState } from "../../pmr/interfaces";
-import { login } from "../../utils/actions";
-import { useStore, ConnectHoc } from "../../pmr/pmrReactHooks";
+import { login } from "../../pmr/actions";
+import { ConnectHoc } from "pmrjs";
+import { useStore } from "../../pmr/store";
 import { useHistory } from "react-router-dom";
 import "./login.css";
 
@@ -10,6 +11,13 @@ import "./login.css";
 function Login(): ReactElement {
   const history = useHistory();
   const [data] = useStore(Login);
+
+  useEffect(() => {
+    if (data.isAuth === true) {
+      history.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.isAuth]);
   // console.log(data);
 
   const initState: State = {};
