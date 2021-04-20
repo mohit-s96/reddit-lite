@@ -23,7 +23,7 @@ function Nav({}: Props): ReactElement {
   return (
     <nav className="main-nav-block">
       <div className="nav-flex">
-        <span className="nav-branding">SpReddit</span>
+        <span className="nav-branding">Lite-Reddit</span>
       </div>
       <div className="nav-flex">
         <span

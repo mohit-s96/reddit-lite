@@ -18,12 +18,6 @@ export const reducer: Reducer = (
   },
   action: ReducerAction
 ) => {
-  if (action.type === "USER_LOADED") {
-    // console.log({
-    //   ...state,
-    //   user: action.payload,
-    // });
-  }
   switch (action.type) {
     case "AUTH_LOADING":
       return {

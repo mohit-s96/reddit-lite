@@ -34,14 +34,10 @@ function Login(): ReactElement {
   };
   return (
     <div className="login-page-container flex-center">
-      {/* {data.authLoading ? (
-        <div>Loading...</div>
-      ) : data?.user?.email ? (
-        <div>{data.user.email}</div>
-      ) : (
-        <div>not auth yet</div>
-      )} */}
       <div className="login-form-wrapper">
+        <h2 style={{ textAlign: "center", color: "#000", margin: "1rem" }}>
+          Enter any email password combination to login
+        </h2>
         <form className="flex-center">
           <div className="form-group flex-center">
             <label htmlFor="email">Email: </label>
@@ -68,4 +64,4 @@ const mapState = (state: StoreState) => ({
   isAuth: state.isAuth,
 });
 
-export default ConnectHoc(Login, mapState);
+export default ConnectHoc(Login, mapState as any);
