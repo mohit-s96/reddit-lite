@@ -113,7 +113,10 @@ export const loadPosts = (str: string) => {
       });
       loadPagination();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      setActiveSub("memes");
+    });
 };
 
 export const loadPagination = () => {

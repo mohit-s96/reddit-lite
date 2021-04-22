@@ -30,7 +30,16 @@ function Layout(): ReactElement {
       {data.profile ? <Profile /> : null}
       <SelectSub />
       <ShowSub />
-      {data.paginationLoading ? <p>Loading...</p> : null}
+      {data.paginationLoading ? (
+        <div className="flex-center">
+          <p
+            className="no-content loading-anim"
+            style={{ display: "inline-block", margin: "0 auto" }}
+          >
+            Loading...
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 }

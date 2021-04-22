@@ -2,14 +2,12 @@ import React, { ReactElement } from "react";
 // import { Link } from "react-router-dom";
 import { logout, flipProfile } from "../../pmr/actions";
 import "./Nav.css";
+import { ConnectHoc } from "pmrjs";
+import { useStore } from "../../pmr/store";
+import { StoreState } from "../../pmr/interfaces";
 
-interface Props {
-  isAuth?: boolean;
-  name?: string;
-  avatar?: string;
-}
-
-function Nav({}: Props): ReactElement {
+function Nav(): ReactElement {
+  const [data] = useStore(Nav);
   const clickEnter = (e: React.KeyboardEvent, type: string) => {
     if (e.keyCode === 13) {
       if (type === "logout") {
@@ -33,7 +31,7 @@ function Nav({}: Props): ReactElement {
           onClick={flipProfile}
           onKeyDown={(e) => clickEnter(e, "profile")}
         >
-          Profile
+          {data.profile ? "Close Profile" : "Profile"}
         </span>
         <span className="nav-item-btn">Random Sub</span>
         <span
@@ -50,4 +48,10 @@ function Nav({}: Props): ReactElement {
   );
 }
 
-export default Nav;
+const mapState = (state: StoreState) => {
+  return {
+    profile: state.modalStates.profile,
+  };
+};
+
+export default ConnectHoc(Nav, mapState as any);
